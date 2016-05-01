@@ -16,6 +16,7 @@ public class Chat {
         init();
     }
 
+
     //Sends a message from one user to all users, along with a list of current usernames
     public static void broadcastMessage(String sender, String message) {
         userUsernameMap.keySet().stream().filter(Session::isOpen).forEach(session -> {
@@ -37,6 +38,14 @@ public class Chat {
                 p(message),
                 span().withClass("timestamp").withText(new SimpleDateFormat("HH:mm:ss").format(new Date()))
         ).render();
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
     }
 
 }
